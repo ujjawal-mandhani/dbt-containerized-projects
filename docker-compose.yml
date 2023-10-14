@@ -1,0 +1,55 @@
+version: '3.1'
+
+services:
+  dbt-services:
+    build: .
+    volumes:
+      - ./dbt-project/:/home/
+      - ./infinite/:/home/infinite
+      - .dbt:/root/.dbt/
+    ports:
+      - 9022:8081
+    environment:
+      - ORA_PYTHON_DRIVER_TYPE=thin
+    networks:
+      - dbt-network
+    depends_on:
+      - db
+      - orcl-db
+      - spark-cluster
+  spark-cluster:
+    build: ./spark-master/
+    restart: always
+    ports:
+      - 9044:8080
+      - 9055:7077
+      - 9066:10000
+    networks:
+      - dbt-network
+  db:
+    image: postgres
+    restart: always
+    # volumes:
+    #   - ./postgres_data/:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: ujjawaldbtpostgres
+      POSTGRES_DB: dbt_postgres
+    ports:
+      - 9011:5432
+    networks:
+      - dbt-network
+  orcl-db:
+    image: container-registry.oracle.com/database/free:latest
+    restart: always
+    environment:
+      - ORACLE_PWD=Ujjawal@12345678
+      - ORACLE_CHARACTERSET=AL32UTF8
+      - ORA_PYTHON_DRIVER_TYPE=thin
+    ports:
+      - 9033:1521
+    networks:
+      - dbt-network
+
+networks:
+  dbt-network:
+    driver: bridge

@@ -1,0 +1,10 @@
+postgres_data
+dbt_oracle_project/target
+dbt_oracle_project/dbt_packages
+dbt_oracle_project/logs
+dbt_project/target
+dbt_project/dbt_packages
+dbt_project/logs
+dbt_spark_project/target
+dbt_spark_project/dbt_packages
+dbt_spark_project/logs

@@ -1,0 +1,273 @@
+============================================================================== 
+Magnitude Simba Apache Spark ODBC Data Connector Release Notes 
+==============================================================================
+
+The release notes provide details of enhancements, features, known issues, and
+workflow changes in Simba Apache Spark ODBC Connector 2.7.5, as well as the 
+version history. 
+
+
+2.7.5 ========================================================================
+
+Released 2023-09-08
+
+Enhancements & New Features
+
+ * [SPARKO-1068][SPARKO-1071] OAuth 2.0 Client Credentials authentication 
+   support
+
+   The connector now supports OAuth 2.0 Client Credentials authentication. To 
+   do this, in the Authentication Flow drop-down list, select Client 
+   Credentials (set the Auth_Flow property to 1). For more information, see 
+   the Installation and Configuration Guide.
+
+ * [SPARKO-1024] Updated server-side encryption
+
+   The connector now supports server-side encryption with customer-provided 
+   keys. Any encryption keys provided to the connector are automatically 
+   passed on to the cloud data source.
+
+ * [SPARKO-1087] OIDC endpoint discovery support
+
+   The connector now supports OIDC endpoint discovery. For more information, 
+   see the Installation and Configuration Guide.
+
+ * [SPARKO-1117] Updated timedate function support
+    
+   The connector now supports the WEEK timedate function.
+
+ * [SPARKO-1088] Updated error message
+  
+   The error message returned when using cloud fetch has been improved.
+
+ * [SPARKO-1112] Security updates
+
+   The connector has been updated with security improvements.
+
+ 
+Resolved Issues
+The following issues have been resolved in Simba Apache Spark ODBC Connector 
+2.7.5.
+
+ * [SPARKO-986] The connector does not allow multiple (non-nested) comments in
+   the User-agent string.
+
+ * [SPARKO-1122] When calling SQLForeignKeys and a NULL value is passed for 
+   the catalog of the primary table or the foreign table, the connector 
+   returns an empty result.
+
+   This issue has been resolved. The connector now returns empty results  
+   without hitting the server when both PKCatalogName and FKCatalogName are 
+   NULL. When only one of them is NULL, the connector passes the request to 
+   the server and lets the server to handle it.
+
+
+Known Issues 
+The following are known issues that you may encounter due to limitations in 
+the data source, the connector, or an application.
+
+ * [SPARKO-1101] When the Auth_AccessToken line length is longer than the 
+   maximum limit of 1000, the connector returns an authentication error. For
+   more information, see the Installation and Configuration Guide.
+
+ * [SPARKO-879] When connecting to a server that supports multiple catalogs, 
+   the connector no longer reports the catalog for schemas and tables as
+   SPARK.
+  
+   The Spark server now reports the catalog. 
+
+ * [SPARKO-670] In some cases, when retrieving timestamp data, the connector 
+   returns an error.
+ 
+   In some cases, when connecting to certain distributions of 
+   Apache Spark, the connector returns the following error: "Conversion from
+   number to string failed due to undersized character buffer". This issue 
+   affects versions 2.6.12 to 2.6.14 of the Spark ODBC connector. 
+   
+   As a workaround, set EnableArrow=0 in the connection string or DSN. 
+
+ * [SPARKO-620] Issue with date and timestamp before the beginning of the 
+   Gregorian calendar when connecting to Spark 2.4.4 or later, or versions 
+   previous to 3.0, with Arrow result set serialization.
+ 
+   When using Spark 2.4.4 or later, or versions previous to Spark 3.0, DATE 
+   and TIMESTAMP data before October 15, 1582 may be returned incorrectly if 
+   the server supports serializing query results using Apache Arrow. This 
+   issue should not impact most distributions of Apache Spark.
+
+   To confirm if your distribution of Spark 2.4.4 or later has been impacted 
+   by this issue, you can execute the following query:
+
+   SELECT DATE '1581-10-14'
+
+   If the result returned by the connector is 1581-10-24, then you are impacted 
+   by the issue. In this case, if your data set contains date and/or timestamp
+   data earlier than October 15, 1582, you can work around this issue by 
+   adding EnableArrow=0 in your DSN or connection string to disable the Arrow
+   result set serialization feature.  
+
+ * When retrieving data from a BINARY column, a ClassCastException error 
+   occurs.
+
+   In Spark 1.6.3 or earlier, the server sometimes returns a 
+   ClassCastException error when attempting to retrieve data from a BINARY 
+   column.
+
+   This issue is fixed as of Spark 2.0.0.
+
+   For more information, see the JIRA issue posted by Apache named "When
+   column type is binary, select occurs ClassCastException in Beeline" at
+   https://issues.apache.org/jira/browse/SPARK-12143.
+
+
+Workflow Changes =============================================================
+
+The following changes may disrupt established workflows for the connector. 
+
+
+2.7.3 ------------------------------------------------------------------------
+
+ * [SPARKO-585][SPARKO-586][SPARKO-587][SPARKO-588] Removed support for Spark
+   1.6, 2.1, and 2.2
+
+   Beginning with this release, the connector no longer supports servers that 
+   run Spark version 1.6, 2.1, or 2.2. For information about the supported 
+   Spark versions, see the Installation and Configuration Guide.
+
+ * [Sparko-1106] Removed support for macOS universal bitness
+
+   Beginning with this release, the connector no longer supports universal
+   bitness for macOS. Support for macOS versions 10.14 and 10.15 have been
+   removed. For a list of supported macOS versions, see the Installation and
+   Configuration Guide.
+   
+
+2.6.17 -----------------------------------------------------------------------
+
+ * [SPARKO-539][SPARKO-553][SPARKO-557][SPARKO-744] Removed support for 
+   multiple operating systems
+
+   Beginning with this release, the connector no longer supports the following
+   operating systems:
+   - Windows 7 SP1
+   - Windows Server 2008 R2
+   - macOS 10.9, 10.10, 10.11, and 10.12
+   - CentOS 6
+   - Red Hat Enterprise Linux (RHEL) 6
+   - Ubuntu 14.04
+
+   For a list of supported operating systems, see the Installation and 
+   Configuration Guide.	
+
+
+2.6.12 ------------------------------------------------------------------------
+
+ * [SPARKO-545] Removed support for the Visual C++ Redistributable for 
+   Visual Studio 2013
+
+   Beginning with this release, the driver now requires the 2015 version of
+   this dependency instead of the 2013 version. 
+
+   To download the installation packages for the Visual C++ Redistributable 
+   for Visual Studio 2015, go to 
+   https://www.microsoft.com/en-ca/download/details.aspx?id=48145.
+
+ * [SPARKO-583] Removed support for Spark 2.0
+
+   Beginning with this release, the driver no longer supports servers that run
+   Spark version 2.0. For information about the supported Spark versions, see 
+   the Installation and Configuration Guide.
+
+
+2.6.0 ------------------------------------------------------------------------
+
+ * Minimum TLS Version
+
+   Beginning with this release, the driver requires a minimum version of TLS 
+   for encrypting the data store connection. By default, the driver requires 
+   TLS version 1.2. This requirement may cause existing DSNs and connection 
+   strings to stop working, if they are used to connect to data stores that 
+   use a TLS version earlier than 1.2.
+
+   To resolve this, in your DSN or connection string, set the Minimum TLS 
+   option (the Min_TLS property) to the appropriate version of TLS for your 
+   server. For more information, see the Installation and Configuration Guide.
+   
+
+Version History ==============================================================
+
+2.7.3 ------------------------------------------------------------------------
+
+Released 2023-07-17
+
+Enhancements & New Features
+
+ * [SPARKO-1093][SPARKO-1097][SPARKO-1028] Updated third-party libraries
+
+   The connector now uses the following third-party libraries:
+   - Apache Thrift 0.17.0 (previously 0.9.0)
+   - Apache ZooKeeper 3.7.1 (previously 3.4.6)
+   - Boost 1.81.0 (previously 1.64.0)
+   - cyrus sasl 2.1.28 (previously 2.1.26) 
+   - Expat 2.5.0 (previously 2.4.6)   
+   - ICU 71.1 (previously 58.2x)
+   - libcURL 8.1.2 (previously 7.84.0)
+   - Lz4 1.9.4 (previously 1.9.3)
+   - OpenSSL 3.0.9 (previously 1.1.1) 
+   - Simba Engine SDK 10.2 (previously 10.1)
+   - Zlib 1.2.13 (previously 1.2.11)  
+
+ * [SPARKO-1089] Updated SQL_ATTR_MAX_ROWS support
+
+   The connector can now pass the SQL_ATTR_MAX_ROWS attribute value to the 
+   server to restrict the number of rows to be returned for the result set. 
+
+ * [SPARKO-1106] Updated macOS support
+   
+   On macOS, the connector is now a Universal driver that natively supports 
+   Apple Silicon. For security best practices, it is suggested to keep both
+   the connector and OS updated. 
+ 
+ * [SPARKO-1027][SPARKO-1058] OAuth2 browser based authentication support
+
+   The connector now supports browser based OAuth2 authentication. To do this,
+   from the Authentication Flow drop down list, select Browser Based 
+   Authorization Code (set the Auth_Flow property to 2). For more information,
+   see the Installation and Configuration Guide.
+
+ 
+Resolved Issues
+The following issues have been resolved in Simba Apache Spark ODBC Connector 
+2.7.3.
+
+ * [SPARKO-1085] When connecting to an Oracle SQL Endpoint, the SSL handshake 
+   fails.
+
+ * [SPARKO-1092][SPARKO-1102] The connector passes legacy catalogs to the 
+   server for the SQLPrimaryKey and the SQL ForeignKey.
+
+ * [SPARKO-1098] The connector does not remove catalog SPARK from the native 
+   query.
+
+ * [SPARKO-1004] The REMARKS column of the tables metadata does not populate 
+   with comments.
+
+ * [SPARKO-1039] When a self signed certificate is added to Windows Trust
+   Store, the connector does not validate the certificate.
+ 
+ * [SPARKO-1008] When executing SQLPrimaryKeys or SQLForeignKeys, the close
+   operation fails, causing the result set to not close on the server side.
+
+ * [SPARKO-1049] The connector does not create NOT NULL columns.
+
+ * [SPARKO-1056] On Linux, the connector does not trigger the Cloud Fetch 
+   feature.
+
+ * [SPARKO-981] When testing a connection with a non-existent database, the 
+   connector does not return an error.
+
+ * [SPARKO-982] In some cases, the connector truncates a double value instead
+   of rounding it.
+   
+
+============================================================================== 
