@@ -8,3 +8,5 @@ dbt_project/logs
 dbt_spark_project/target
 dbt_spark_project/dbt_packages
 dbt_spark_project/logs
+dbt-project/logs
+dbt-project/docs
