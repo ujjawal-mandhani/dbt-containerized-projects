@@ -1,5 +1,7 @@
 {{config(materialized = 'table')}} 
 
+
+
 with data as (
     select
         "Index" as index,
@@ -12,7 +14,7 @@ with data as (
         "Industry" as industry,
         "Numberofemployees" as numberofemployees
     from
-        dbt_staging.organisation_data
+        dbt_transformed.organisation_data
 )
 select
     *
