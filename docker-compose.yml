@@ -4,7 +4,10 @@ services:
   dbt-services:
     build: .
     volumes:
-      - ./dbt-project/:/home/
+      - ./dbt-project/dbt_project/:/home/dbt_postgres/dbt_project
+      - ./dbt-project/dbt_oracle_project/:/home/dbt_oracle/dbt_oracle_project
+      - ./dbt-project/dbt_spark_project/:/home/dbt_spark/dbt_spark_project
+      - ./dbt-project/dbt_microsoft_sql_server:/home/dbt_mssql/dbt_microsoft_sql_server
       - .dbt:/root/.dbt/
     ports:
       - 9022:8081
@@ -16,6 +19,7 @@ services:
       - db
       - orcl-db
       - spark-cluster
+      - mssql-db
   spark-cluster:
     build: ./spark-master/
     restart: always
@@ -28,8 +32,6 @@ services:
   db:
     image: postgres
     restart: always
-    # volumes:
-    #   - ./postgres_data/:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: ujjawaldbtpostgres
       POSTGRES_DB: dbt_postgres
@@ -46,6 +48,16 @@ services:
       - ORA_PYTHON_DRIVER_TYPE=thin
     ports:
       - 9033:1521
+    networks:
+      - dbt-network
+  mssql-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    restart: always
+    environment:
+      - "ACCEPT_EULA=Y"
+      - "MSSQL_SA_PASSWORD=Ujjawal@password"
+    ports:
+      - 9014:1433
     networks:
       - dbt-network
 

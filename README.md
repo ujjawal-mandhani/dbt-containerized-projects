@@ -5,10 +5,39 @@
 docker, docker-compose
 ### Setup
 ```bash
-docker-compose up
+docker-compose build
+docker-compose up -d
+docker exec -it dbt-containerized-projects_dbt-services_1 bash
 ```
 ### dbt-commands
 ```bash
+cd dbt_postgres
+source bin/activate
+cd dbt_project/
+dbt compile 
+dbt debug
+dbt run 
+dbt seed 
+
+cd dbt_oracle
+source bin/activate
+cd dbt_oracle_project
+dbt compile 
+dbt debug
+dbt run 
+dbt seed 
+
+cd dbt_spark
+source bin/activate
+cd dbt_spark_project/
+dbt compile 
+dbt debug
+dbt run 
+dbt seed 
+
+cd dbt_mssql
+source bin/activate
+cd dbt_microsoft_sql_server/
 dbt compile 
 dbt debug
 dbt run 
@@ -68,3 +97,12 @@ with below details
 ![Spark Db](./src/spark-db.png "Spark Db")
 
 ![Hive_Dbeaver](src/Hive_Dbeaver.png)
+
+
+## MSSQL DB 
+
+**Image of MSSQL db**
+
+![MSSQL](src/MSSQL-CONN.png)
+
+![MSSQL Commands](src/MSSQL-Commands.png)
