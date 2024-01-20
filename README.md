@@ -14,15 +14,22 @@ dbt debug
 dbt run 
 dbt seed 
 ```
-### database
-#### Postgres
+# databases
+
+
+## Postgres
 **Image of postgres DB**
 
 ![postgres](./src/postgres.png "postgres")
+
+![postgres conn](src/postgress_con.png)
+
+
 **DBT command for dbt run**
 
 ![postgres](./src/dbt_postgres.png "command")
-#### Oracle
+
+## Oracle
 You need to create a Schema DBT_STAGING
 and have to run below query to give sufficient permission
 ```sql
@@ -31,10 +38,15 @@ ALTER USER DBT_STAGING quota 100M on USERS;
 **Image of oracle db**
 
 ![Oracle](./src/oracle.png "Oracle DB")
+
+![oracle_conn](src/oracle_conn.png)
+
 **DBT command for dbt run**
 
 ![Oracle](./src/oracle_command.png "Oracle")
-#### Spark Cluster
+
+
+## Spark Cluster
 
 **Note** In order to run spark cluster these below scripts must be start(these already automated in docker file)
 
@@ -54,3 +66,5 @@ with below details
 **Image of Cluster Default Database**
 
 ![Spark Db](./src/spark-db.png "Spark Db")
+
+![Hive_Dbeaver](src/Hive_Dbeaver.png)

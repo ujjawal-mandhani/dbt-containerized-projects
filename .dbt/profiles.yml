@@ -30,6 +30,6 @@ dbt_spark_project:
       method: thrift
       port: 10000
       schema: default
-      threads: 4
+      threads: 10
       type: spark
   target: dev

@@ -5,7 +5,6 @@ services:
     build: .
     volumes:
       - ./dbt-project/:/home/
-      - ./infinite/:/home/infinite
       - .dbt:/root/.dbt/
     ports:
       - 9022:8081
@@ -35,7 +34,7 @@ services:
       POSTGRES_PASSWORD: ujjawaldbtpostgres
       POSTGRES_DB: dbt_postgres
     ports:
-      - 9011:5432
+      - 9013:5432
     networks:
       - dbt-network
   orcl-db:
