@@ -14,34 +14,37 @@ docker exec -it dbt-containerized-projects_dbt-services_1 bash
 cd dbt_postgres
 source bin/activate
 cd dbt_project/
+dbt seed 
 dbt compile 
 dbt debug
 dbt run 
-dbt seed 
+
 
 cd dbt_oracle
 source bin/activate
 cd dbt_oracle_project
+dbt seed 
 dbt compile 
 dbt debug
 dbt run 
-dbt seed 
+
 
 cd dbt_spark
 source bin/activate
 cd dbt_spark_project/
+dbt seed 
 dbt compile 
 dbt debug
 dbt run 
-dbt seed 
 
 cd dbt_mssql
 source bin/activate
 cd dbt_microsoft_sql_server/
+dbt seed 
 dbt compile 
 dbt debug
 dbt run 
-dbt seed 
+
 ```
 # databases
 
